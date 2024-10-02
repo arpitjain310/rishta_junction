@@ -49,5 +49,3 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
-
-if 
