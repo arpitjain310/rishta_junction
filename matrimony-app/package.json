@@ -1,5 +1,5 @@
 {
-  "name": "matrimony-frontend",
+  "name": "site",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,11 +9,13 @@
     "axios": "^1.7.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
+    "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"cd backend && uvicorn main:app --reload\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
