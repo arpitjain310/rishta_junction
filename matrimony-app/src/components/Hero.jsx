@@ -21,9 +21,11 @@ const Hero = () => {
         <section className={styles.hero}>
             <h2 className={styles.heroTitle}>Embark on a Journey of Love and Commitment</h2>
             <p className={styles.heroSubtitle}>
-                In India's Tier 2 and Tier 3 cities, marriage is not just a ceremony, but a sacred bond. Join us to find your perfect match today.
+                In our country, marriage is not just a ceremony, but a sacred bond.
+                <br />
+                Join us to find your perfect match today.
             </p>
-            <button className={styles.ctaButton}>Start Your Journey</button>
+            <button className={styles.ctaButton} >Start Your Journey</button>
             <div className={styles.stats}>
                 {statsData.map((stat, index) => (
                     <div key={index} className={styles.statItem}>
