@@ -13,7 +13,7 @@ router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-@router.post("/users/", response_model=UserOut)
+@router.post("/register/", response_model=UserOut)
 def create_user(user: UserCreate, db: Session = Depends(db.get_db)):
     print("user", user)
     # Check if the user already exists
@@ -35,8 +35,6 @@ def create_user(user: UserCreate, db: Session = Depends(db.get_db)):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    
-    
     return db_user
 
 

@@ -1,7 +1,0 @@
-Create a Login functionality
-Register functionality
-
-Ability to search
-OTP functionality
-
-Later -- payment

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from db import Base
 
@@ -10,6 +10,13 @@ class Profile(Base):
     age = Column(Integer, nullable=False)
     gender = Column(String, nullable=False)
     bio = Column(String, nullable=True)
-
+    religion = Column(String, nullable=True)
+    caste = Column(String, nullable=True)
+    height = Column(Float, nullable=True)
+    weight = Column(Float, nullable=True)
+    education = Column(String, nullable=True)
+    profession = Column(String, nullable=True)
+    salary = Column(Integer, nullable=True)
+    
     owner = relationship("User", back_populates="profiles")
     photos = relationship("Photo", back_populates="profile")
