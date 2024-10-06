@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.sacredMatches {
+  background-color: #f6f6f6;
+  display: flex;
+  /* min-width: 320px;
+  max-width: 720px; */
+  width:100%;
+  flex-direction: column;
+  overflow: hidden;
+}

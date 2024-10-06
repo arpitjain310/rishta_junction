@@ -1,79 +1,32 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Profile from './pages/profile/profile';
+import Search from './pages/search/search';
+import Register from './pages/register/register.jsx';
+import Login from './pages/login/login.jsx';
+import LandingPage from './pages/landingpage/landingpage';
 
-function App() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
+const SacredMatches = () => {
+  return (
+    <Router>
+      <div className='sacredMatches'>
+        <Header />
+        <main>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/search" element={<Search />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
+  );
+};
 
-    const handleRegister = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/register/', {
-                username,
-                password,
-            });
-            setMessage(`Registered successfully: ${response.data.username}`);
-        } catch (error) {
-            setMessage('Registration failed');
-        }
-    };
-
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/token/', null, {
-                auth: {
-                    username,
-                    password,
-                },
-            });
-            setMessage(`Logged in successfully: ${response.data.access_token}`);
-        } catch (error) {
-            setMessage('Login failed');
-        }
-    };
-
-    return (
-        <div>
-            <h1>Matrimony Website</h1>
-            <form onSubmit={handleRegister}>
-                <h2>Register</h2>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit">Register</button>
-            </form>
-
-            <form onSubmit={handleLogin}>
-                <h2>Login</h2>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit">Login</button>
-            </form>
-
-            {message && <p>{message}</p>}
-        </div>
-    );
-}
-
-export default App;
+export default SacredMatches;
