@@ -89,7 +89,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     )
     
     try:
-        payload = decode_token(token, "your_secret_key", algorithms=["HS256"])
+        payload = decode_token(token)
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception

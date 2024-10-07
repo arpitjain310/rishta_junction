@@ -27,3 +27,5 @@ rjenv/
 tests/
 *.pyc*
 .env
+*.txt
+launch.json
