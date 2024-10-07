@@ -1,6 +1,6 @@
 import React from 'react';
 import PricingPlan from './PricingPlan';
-import styles from './SacredMatches.module.css';
+import styles from './RishtaJunction.module.css';
 
 const pricingData = [
   {

@@ -9,10 +9,10 @@ import Register from './pages/register/register.jsx';
 import Login from './pages/login/login.jsx';
 import LandingPage from './pages/landingpage/landingpage';
 
-const SacredMatches = () => {
+const RishtaJunction = () => {
   return (
     <Router>
-      <div className='sacredMatches'>
+      <div className='RishtaJunction'>
         <Header />
         <main>
           <Routes>
@@ -29,4 +29,4 @@ const SacredMatches = () => {
   );
 };
 
-export default SacredMatches;
+export default RishtaJunction;

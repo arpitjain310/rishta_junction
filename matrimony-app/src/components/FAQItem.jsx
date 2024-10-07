@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './SacredMatches.module.css';
+import styles from './RishtaJunction.module.css';
 
 const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);

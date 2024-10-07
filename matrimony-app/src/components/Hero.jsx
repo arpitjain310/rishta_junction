@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './SacredMatches.module.css';
+import styles from './RishtaJunction.module.css';
 import icon4 from './../assets/icon4.svg';
 import icon9 from './../assets/icon9.svg';
 import icon1 from './../assets/icon1.svg';

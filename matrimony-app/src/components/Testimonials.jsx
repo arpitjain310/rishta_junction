@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './SacredMatches.module.css';
+import styles from './RishtaJunction.module.css';
 
 
 const Testimonials = () => {

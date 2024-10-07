@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './SacredMatches.module.css';
+import styles from './RishtaJunction.module.css';
 import greenTick from './../assets/greentick.svg';
 
 const PricingPlan = ({ title, price, description, features, buttonText, isHighlighted }) => {

@@ -4,7 +4,7 @@ import { FaWhatsapp, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa'
 const About = () => {
   return (
     <footer className="bg-gray-100 py-8">
-      <div className="container mx-auto px-4">
+      <div className="aboutus" id="aboutus">
         <h2 className="text-3xl font-bold mb-6 text-center">About Us</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
