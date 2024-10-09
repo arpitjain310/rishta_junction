@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import db
+from datetime import timedelta
+from db import get_db
 from utils.hashing import get_password_hash, verify_password
 from utils.jwt_handler import create_access_token, decode_token
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from schemas.user_schema import UserOut, UserCreate
 from models.users import User
-from datetime import timedelta
+from models.profile import Profile
 
 
 router = APIRouter()
@@ -14,8 +15,7 @@ router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 @router.post("/register/", response_model=UserOut)
-def create_user(user: UserCreate, db: Session = Depends(db.get_db)):
-    print("user", user)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
     # Check if the user already exists
     existing_user = db.query(User).filter(User.email == user.email).first()
     if existing_user:
@@ -24,22 +24,53 @@ def create_user(user: UserCreate, db: Session = Depends(db.get_db)):
     # Hash the password before saving
     hashed_password = get_password_hash(user.password)
     
-    # Create new user instance
+    # Create new user instance (storing basic user data)
     db_user = User(
         username=user.username, 
         email=user.email, 
         hashed_password=hashed_password
     )
     
-    print("user", db_user)
+    # Add the user to the database
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    
+    # Create a profile for the newly created user
+    db_profile = Profile(
+        user_id=db_user.user_id,  # Link profile to user_id
+        age=user.age,
+        gender=user.gender,
+        height=user.height,
+        complexion=user.complexion,
+        body_type=user.body_type,
+        marital_status=user.marital_status,
+        have_children=user.have_children,
+        diet=user.diet,
+        drink=user.drink,
+        smoke=user.smoke,
+        blood_group=user.blood_group,
+        specially_abled=user.specially_abled,
+        education=user.education,
+        profession=user.profession,
+        religion=user.religion,
+        caste=user.caste,
+        location_residence=user.location_residence,
+        place_of_birth=user.place_of_birth,
+        date_of_birth=user.date_of_birth,
+        manglik=user.manglik
+    )
+    
+    # Add the profile to the database
+    db.add(db_profile)
+    db.commit()
+    db.refresh(db_profile)
+    
     return db_user
 
 
 @router.post("/login")
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db.get_db)):
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # Check if user exists
     user = db.query(User).filter(User.email == form_data.username).first()
     
@@ -53,7 +84,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 
 @router.post("/token/refresh")
-def refresh_token(refresh_token: str, db: Session = Depends(db.get_db)):
+def refresh_token(refresh_token: str, db: Session = Depends(get_db)):
 
     credentials_exception = HTTPException(
         status_code=401,
@@ -63,7 +94,7 @@ def refresh_token(refresh_token: str, db: Session = Depends(db.get_db)):
     
     # Decode the refresh token
     try:
-        payload = decode_token(refresh_token)  # Implement this function in your utils
+        payload = decode_token(refresh_token) 
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
@@ -81,7 +112,7 @@ def refresh_token(refresh_token: str, db: Session = Depends(db.get_db)):
 
 # Current User 
 @router.post("/current_user")
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(db.get_db)):
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",

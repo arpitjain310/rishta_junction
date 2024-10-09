@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
+from typing import List
 from sqlalchemy.orm import Session
 import models, schemas, db
 from schemas.profile_schema import ProfileCreate, ProfileOut
+
 
 
 router = APIRouter()
@@ -14,12 +16,12 @@ def create_profile(profile: ProfileCreate, db: Session = Depends(db.get_db)):
     db.refresh(db_profile)
     return db_profile
 
-@router.get("/profiles/", response_model=list[ProfileOut])
+@router.get("/profiles/", response_model=List[ProfileOut])
 def get_all_profiles(db: Session = Depends(db.get_db)):
     db_profiles = db.query(models.profile.Profile).all()
     return db_profiles
 
-@router.get("/profiles/filter/", response_model=list[ProfileOut])
+@router.get("/profiles/filter/", response_model=List[ProfileOut])
 def get_filtered_profiles(
     age_min: int = None,
     age_max: int = None,
