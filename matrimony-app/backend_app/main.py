@@ -5,9 +5,19 @@ from models.users import User
 from models.profile import  Profile
 from models.photo import Photo 
 from models.match import Match 
+from fastapi.middleware.cors import CORSMiddleware
 
 # Initialize the app
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"], 
+)
+
 # Create the database tables
 Base.metadata.create_all(bind=engine)
 

@@ -20,7 +20,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Create a base class for our models to inherit from
 Base = declarative_base()
 
-
 def get_db() -> Session:
     db = SessionLocal()
     try:
