@@ -1,6 +1,6 @@
 /* Container styling */
 .login-container {
-    max-width: 400px;
+    max-width: 100px;
     margin: 100px auto;
     padding: 20px;
     border: 1px solid #ddd;
@@ -41,7 +41,7 @@
     width: 50%;
     margin-left: 20%;
     padding: 15px;
-    background-color: #28a745;
+    background-color: #ee4248;
     color: white;
     font-size: 16px;
     border: none;
@@ -51,7 +51,7 @@
   }
   
   button:hover {
-    background-color: #218838;
+    background-color: #c0392b; /* darker on hover */
   }
   
   /* Error message styling */

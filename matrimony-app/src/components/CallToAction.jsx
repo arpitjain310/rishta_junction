@@ -4,11 +4,18 @@ import marriageimg from './../assets/marriage.jpg';
 import greenTick from './../assets/greentick.svg';
 import img3 from './../assets/img3.png';
 
+import calltoaction1 from './../assets/calltoaction1.jpeg';
+
+
 const CallToAction = () => {
     const featureData = [
         { title: "Tailored Matchmaking" },
         { title: "Safe and Secure" },
-        { title: "Cultural Compatibility" }
+        { title: "Cultural Compatibility" },
+        { title: "Verified Profiles" },
+        { title: "Advanced Search Filters" },
+        { title: "Privacy Controls" },
+        { title: "24/7 Customer Support" }
       ];
 
   return (
@@ -21,20 +28,21 @@ const CallToAction = () => {
           Join our community dedicated to forging sacred relationships and connecting families in a respectful and meaningful way.
         </p>
         <div className={styles.ctaButtons}>
-          <button className={styles.secondaryButton}>Learn More</button>
-          <button className={styles.primaryButton}>Get Started Now</button>
+          <button className={styles.secondaryButton} onClick={() => window.location.href = '/terms'}>Learn More</button>
+          <button className={styles.primaryButton} onClick={() => window.location.href = '/register'}>Get Started Now</button>
         </div>
         <div className={styles.ctaStats}>
           <div className={styles.statColumn}>
-            <div className={styles.statNumber}>2.5k+</div>
-            <div className={styles.statDescription}>Join 10,000+ Happy Families</div>
+            <div className={styles.statNumber}>100+</div>
+            <div className={styles.statDescription}>Successful Matches</div>
           </div>
           <div className={styles.statColumn}>
-            <div className={styles.rating}>
-              <span className={styles.ratingNumber}>5.0</span>
-             
-            </div>
-            <div className={styles.ratingDescription}>Rated 4.8/5 by Users</div>
+            <div className={styles.statNumber}>24/7</div>
+            <div className={styles.statDescription}>Customer Support</div>
+          </div>
+          <div className={styles.statColumn}>
+            <div className={styles.statNumber}>100%</div>
+            <div className={styles.statDescription}>Secure & Private</div>
           </div>
         </div>
       </div>
@@ -50,9 +58,9 @@ const CallToAction = () => {
            </li>
          ))}
        </ul>
-       <button className={styles.learnMoreButton}>Learn More</button>
+       <button className={styles.learnMoreButton} onClick={() => window.location.href = '/terms'}>Learn More</button>
      </div>
-     <img src={img3} alt="" className={styles.featuresImage} />
+     <img src={calltoaction1} alt="" className={styles.featuresImage} />
    </section>
    </div>
   );

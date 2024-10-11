@@ -1,79 +1,86 @@
-/* Container styling */
 .register-container {
-    max-width: 500px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Form heading */
-  h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  /* Form labels */
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  /* Input fields */
-  input {
-    width: 90%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-  }
-  
-  /* Button styling */
-  button {
-    width: 50%;
-    margin-left: 20%;
-    padding: 15px;
-    background-color: #28a745;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Error message styling */
-  p {
-    color: red;
-    font-size: 14px;
-    text-align: center;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 500px) {
-    .register-container {
-      padding: 15px;
-      margin: 50px auto;
-    }
-  
-    h2 {
-      font-size: 24px;
-    }
-  
-    button {
-      font-size: 14px;
-      padding: 8px;
-    }
-  }
-  
+  width: 100%;
+  max-width: 600px; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the container */
+  background-color: #f9f9f9; /* Light background color */
+  padding: 20px; /* Padding inside the container */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-height: 80vh; /* Set maximum height to 80% of viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+h2 {
+  text-align: center; /* Center the heading */
+  color: #333; /* Darker color for text */
+}
+
+.form-scroll-container {
+  max-height: 400px; /* Set maximum height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding-right: 10px; /* Prevent content overlap with scrollbar */
+}
+
+.register-form {
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack children vertically */
+}
+
+.form-group {
+  margin-bottom: 15px; /* Space between form elements */
+}
+
+label {
+  font-weight: bold; /* Bold text for labels */
+  margin-bottom: 5px; /* Space between label and input */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select {
+  padding: 10px; /* Inner padding for inputs */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 4px; /* Rounded corners for inputs */
+  font-size: 16px; /* Font size */
+}
+
+.height-input {
+  display: flex; /* Use flexbox for height input */
+  gap: 10px; /* Space between feet and inches input */
+}
+
+.height-input input {
+  width: 50%; /* Adjust width for feet and inches input */
+}
+
+.checkbox-group {
+  display: flex; /* Align items in a row */
+  align-items: center; /* Center items vertically */
+}
+
+.checkbox-group input {
+  margin-left: 10px; /* Space after checkbox */
+}
+
+.register-btn {
+  background-color: #3979bd; /* Button background color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  padding: 10px; /* Padding inside button */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px; /* Font size */
+  width:200px;
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s; /* Smooth transition */
+}
+
+.register-btn:hover {
+  background-color: #0056b3; /* Darker background on hover */
+}
+
+.error-text {
+  color: red; /* Color for error messages */
+  text-align: center; /* Center error text */
+  margin-top: 15px; /* Space above error message */
+}

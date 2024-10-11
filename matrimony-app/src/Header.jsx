@@ -3,30 +3,29 @@ import stylesapp from './stylesmain.module.css';
 
 const Header = () => {
   return (
-    <header className={stylesapp.header}>
-      <div className={stylesapp.logoWrapper}>
-        <div className={stylesapp.logo}>
-          <div className={stylesapp.logoInner}>
-            <div className={stylesapp.logoBar} />
-            <div className={stylesapp.logoBarGroup}>
-              <div className={stylesapp.logoBar} />
-              <div className={stylesapp.logoBar} />
-            </div>
-          </div>
-        </div>
+    <div className={stylesapp.header}>
+
+      <div className={stylesapp.companyName}>
+        Rishta Junction<br />
+        Find Your Life Partner
       </div>
-      <h1 className={stylesapp.companyName}>Rishta Junction: Find Your Life Partner</h1>
-      <nav className={stylesapp.navigation}>
-        
+
+      <div className={stylesapp.navigation}>
         <ul className={stylesapp.navList}>
-          <li><a href="#home" className={stylesapp.navItem}>Home</a></li>
-          <li><a href="#about" className={stylesapp.navItem}>About Us</a></li>
-          <li><a href="#matches" className={stylesapp.navItem}>Matches</a></li>
+          <li><a href="/" className={stylesapp.navItem}>Home</a></li>
+          <li><a href="/#about" className={stylesapp.navItem}>About Us</a></li>
+          <li><a href="/search" className={stylesapp.navItem}>Find your match</a></li>
           <li><a href="#testimonials" className={stylesapp.navItem}>Testimonials</a></li>
         </ul>
-      </nav>
-      <button className={stylesapp.loginButton}>Login / Sign Up</button>
-    </header>
+      </div>
+        
+          <button className={stylesapp.loginButton} onClick={() => window.location.href = '/login'}>
+            Login
+            </button>
+
+    
+        
+      </div>
   );
 };
 

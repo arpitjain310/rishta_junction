@@ -1,0 +1,57 @@
+.comingSoonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .description {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+  }
+  
+  .registerSection {
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+  }
+
+  p{
+    color: #555;
+  }
+  .registerButton {
+    background-color: #d11313;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 3%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .registerButton:hover {
+    background-color: #161f2a;
+  }
+  
+  .countdown {
+    margin-top: 20px;
+  }
+  
+  .timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #72228a;
+  }
+  

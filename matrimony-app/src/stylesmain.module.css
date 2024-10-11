@@ -1,126 +1,124 @@
+/* stylesmain.module.css */
+
+.footer {
+  background-color: #fff;
+  padding: 32px 40px 40px;
+  margin-top: 100px;
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid #b3b3b3;
+}
+
+.footerLogo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footerLogoImage {
+  width: 32px;
+  height: 32px;
+}
+
+.footerCompanyName {
+  color: #1a1a1a;
+  font: 700 16px Inter, sans-serif;
+}
+
+.footerNav {
+  display: flex;
+}
+
+.footerNavList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 28px;
+}
+
+.footerNavItem {
+  color: rgba(13, 13, 13, 0.7);
+  font: 600 16px Inter, sans-serif;
+  text-decoration: none;
+}
+
+
 
 .header {
-    background-color: #fff;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    padding: 24px 32px;
-  }
-  
-  .logoWrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: center;
-    width: 40px;
-  }
-  
-  .logo {
-    display: flex;
-    width: 40px;
-    flex-direction: column;
-  }
-  
-  .logoInner {
-    border-radius: 23px;
-    display: flex;
-    flex-direction: column;
-    padding: 6px 0;
-  }
-  
-  .logoBar {
-    background-color: #fff;
-    height: 6px;
-    width: 100%;
-  }
-  
-  .logoBarGroup {
-    display: flex;
-    margin-top: 5px;
-    flex-direction: column;
-    padding: 0 4px;
-  }
-  
-  .companyName {
-    color: #000;
-    font: 700 20px/1.6 Inter, sans-serif;
-    margin: 0 16px;
-  }
-  
-  .navigation {
-    flex: 1;
-  }
-  
-  .navList {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .navItem {
-    color: #000;
-    font: 600 16px Inter, sans-serif;
-    text-decoration: none;
-    margin: 0 8px;
-  }
-  
-  .loginButton {
-    border-radius: 12px;
-    background-color: #ee4248;
-    color: #fff;
-    font: 600 18px/2 Inter, sans-serif;
-    padding: 0 32px;
-    border: 1px solid #ee4248;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 5%;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #eee;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  
-  .footer {
-    background-color: #fff;
-    padding: 32px 40px 40px;
-    margin-top: 100px;
+.companyName {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-right: 20px;
+}
+
+.navigation {
+  flex-grow: 1; /* Takes available space */
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  justify-content: space-evenly;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.navItem {
+  text-decoration: none;
+  font-size: 18px;
+  color: #34495e;
+  padding: 5px 1px;
+  transition: color 0.3s ease;
+}
+
+.navItem:hover {
+  color: #e74c3c;
+}
+
+.loginButton {
+  background-color: #e74c3c;
+  border: none;
+  color: white;
+  text-align: center;
+  width: 10%;
+  min-height: 40px;
+  min-width: 70px;
+  padding: 15px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  /* transition: background-color 0.3s ease; */
+}
+
+.loginButton:hover {
+  background-color: #c0392b;
+}
+@media screen and (max-width: 768px) {
+  .navigation {
+    display: none;
   }
-  
-  .footerContent {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 32px;
-    border-top: 1px solid #b3b3b3;
+
+  .loginButton {
+    padding: 6px 12px;
+    font-size: 0.9rem;
   }
-  
-  .footerLogo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .footerLogoImage {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .footerCompanyName {
-    color: #1a1a1a;
-    font: 700 16px Inter, sans-serif;
-  }
-  
-  .footerNav {
-    display: flex;
-  }
-  
-  .footerNavList {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 28px;
-  }
-  
-  .footerNavItem {
-    color: rgba(13, 13, 13, 0.7);
-    font: 600 16px Inter, sans-serif;
-    text-decoration: none;
-  }
+}
+
