@@ -8,17 +8,18 @@ from models.match import Match
 from fastapi.middleware.cors import CORSMiddleware
 
 # Initialize the app
-app = FastAPI()
+app = FastAPI(root_path="/api")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  
+    allow_origins=["http://62.72.59.161","https://62.72.59.161","*.rishtajunction.com"],  
     allow_credentials=True,
     allow_methods=["*"], 
     allow_headers=["*"], 
 )
 
-# Create the database tables
+# Create the database
+#  tables
 Base.metadata.create_all(bind=engine)
 
 # Include routers

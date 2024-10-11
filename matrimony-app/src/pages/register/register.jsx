@@ -63,7 +63,7 @@ const Register = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8000/register", updatedFormData);
+      const response = await axios.post("http://62.72.59.161/api/register", updatedFormData);
       console.log(response);
       if (response.status===200) {
         alert("Registration successful");
