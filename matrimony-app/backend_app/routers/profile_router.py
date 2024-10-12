@@ -21,6 +21,13 @@ def get_all_profiles(db: Session = Depends(db.get_db)):
     db_profiles = db.query(models.profile.Profile).all()
     return db_profiles
 
+@router.get("/profile/{user_id}")
+def get_profile(user_id: int, db: Session = Depends(db.get_db)):
+    profile = db.query(models.profile.Profile).filter(models.profile.Profile.user_id == user_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    return profile
+
 @router.get("/profiles/filter/", response_model=List[ProfileOut])
 def get_filtered_profiles(
     age_min: int = None,

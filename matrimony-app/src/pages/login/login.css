@@ -1,13 +1,28 @@
 /* Container styling */
 .login-container {
-    max-width: 100px;
-    margin: 100px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
+   
+  }
+  .modeSelectorContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .modeSelector {
+    border-radius: 8px;
+    padding: 4%;
+    color:whitesmoke;
+    background-color: #ee4248;
+    opacity: 80%;
+    display: flex;
+    width: 40%;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .modeSelector:hover {
+    background-color: rgb(143, 140, 186);
   }
   
   /* Form heading */
@@ -53,7 +68,21 @@
   button:hover {
     background-color: #c0392b; /* darker on hover */
   }
-  
+  /* ... existing styles ... */
+
+.close-button {
+  /* position: absolute; */
+  height:30px;
+  width:15px;
+  cursor: pointer;
+}
+
+.login-container {
+  position: relative;
+  width: 100%;
+  /* ... other existing styles ... */
+}
+
   /* Error message styling */
   p {
     color: red;

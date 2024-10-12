@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './register.css';
 
-const Register = () => {
+const UpdateDetails = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -61,21 +61,20 @@ const Register = () => {
       ...formData,
       height: convertedHeight,  // Replace height with the cm value
     };
-
-    try {
-      const response = await axios.post("http://62.72.59.161/api/register", updatedFormData);
-      console.log(response);
-      if (response.status===200) {
-        alert("Registration successful");
-        navigate("/login");
-      } else {
-        setError("Registration failed. Please check your input.");
+      try {
+        const response = await axios.post("http://62.72.59.161/api/register", updatedFormData);
+        console.log(response);
+        if (response.status === 200) {
+          alert("Registration successful");
+          navigate("/login");
+        } else {
+          setError("Registration failed. Please check your input.");
+        }
+      } catch (err) {
+        console.error(err);
+        setError(err.response?.data?.message || "An error occurred during registration.");
       }
-    } catch (err) {
-      console.error(err);
-      setError("An error occurred. Please try again.");
-    }
-  };
+    };
 
   return (
     <div className="register-container">
@@ -517,4 +516,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default UpdateDetails;

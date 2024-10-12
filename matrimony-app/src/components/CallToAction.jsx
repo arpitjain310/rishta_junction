@@ -29,7 +29,7 @@ const CallToAction = () => {
         </p>
         <div className={styles.ctaButtons}>
           <button className={styles.secondaryButton} onClick={() => window.location.href = '/terms'}>Learn More</button>
-          <button className={styles.primaryButton} onClick={() => window.location.href = '/register'}>Get Started Now</button>
+          <button className={styles.primaryButton} onClick={() => window.location.href = '/'}>Get Started Now</button>
         </div>
         <div className={styles.ctaStats}>
           <div className={styles.statColumn}>
@@ -60,7 +60,10 @@ const CallToAction = () => {
        </ul>
        <button className={styles.learnMoreButton} onClick={() => window.location.href = '/terms'}>Learn More</button>
      </div>
+     <div className={styles.featuresImageContainer} >
      <img src={calltoaction1} alt="" className={styles.featuresImage} />
+     </div>
+     
    </section>
    </div>
   );

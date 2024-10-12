@@ -7,6 +7,8 @@ import icon6 from './../assets/icon6.svg';
 import icon8 from './../assets/icon8.svg';
 import icon2 from './../assets/icon2.svg';
 import hero1 from './../assets/hero1.jpeg';
+import Register from './register';
+
 
 const Hero = () => {
 
@@ -19,19 +21,25 @@ const Hero = () => {
     ];
 
     return (
-        <section className={styles.hero}>
-            {/* <div className={styles.welcomeimage}>
-                <img src={hero1} alt="" srcset="" />
-            </div> */}
+        <section className={`${styles.hero} ${styles.heroBackground}`}>
+            <div className={styles.heroContainer}>
+                
             <div className={styles.welcometext}>
-            <h2 className={styles.heroTitle}>Embark on a Journey of Love and Commitment</h2>
+            <h2 className={styles.heroTitle}>Start your happy journey with your soulmate
+            </h2>
                 <p className={styles.heroSubtitle}>
                     In our country, marriage is not just a ceremony, but a sacred bond.
                     <br />
                     Join us to find your perfect match today.
                 </p>
-                <button className={styles.ctaButton} onClick={() => window.location.href = '/register'}>Start Your Journey</button>
+                
+                <button className={styles.ctaButton} onClick={() => window.location.href = '/'}>Register Now</button>
             </div>
+            <div className={styles.registerForm}>
+                <Register />
+            </div>
+            </div>
+           
             <div className={styles.stats}>
                 {statsData.map((stat, index) => (
                     <div key={index} className={styles.statItem}>

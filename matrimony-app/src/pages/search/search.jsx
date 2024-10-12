@@ -1,77 +1,119 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './search.css';
 
 const Search = () => {
+  const [searchCriteria, setSearchCriteria] = useState({
+    minAge: '',
+    maxAge: '',
+    religion: '',
+    caste: '',
+    profession: ''
+  });
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const resultsPerPage = 10;
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSearchCriteria(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here
+    // Here you would typically make an API call with the search criteria
+    console.log('Search criteria:', searchCriteria);
+    // Mock search results
+    const mockResults = Array.from({ length: 25 }, (_, i) => ({
+      id: i + 1,
+      name: `Person ${i + 1}`,
+      age: Math.floor(Math.random() * (50 - 18 + 1)) + 18,
+      religion: ['Hindu', 'Muslim', 'Christian', 'Sikh'][Math.floor(Math.random() * 4)],
+      caste: ['Brahmin', 'Kshatriya', 'Vaishya', 'Shudra', 'N/A'][Math.floor(Math.random() * 5)],
+      profession: ['Engineer', 'Doctor', 'Teacher', 'Lawyer', 'Entrepreneur'][Math.floor(Math.random() * 5)]
+    }));
+    setSearchResults(mockResults);
+    setCurrentPage(1);
   };
 
-  const handleOrderChange = (e) => {
-    // Add your order change logic here
-  };
+  const indexOfLastResult = currentPage * resultsPerPage;
+  const indexOfFirstResult = indexOfLastResult - resultsPerPage;
+  const currentResults = searchResults.slice(indexOfFirstResult, indexOfLastResult);
 
-  const goToPage = (pageNo) => {
-    // Add your pagination logic here
-  };
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="search-container">
-      <ol className="search-breadcrumb">
-        <li><a href="/">Home</a></li>
-        <li><a href="/matrimony-search/matrimonial-search-options.php">Search Options</a></li>
-        <li><a href="/matrimony-search/matrimonial_profiles_by_profession.php">By Profession</a></li>
-        <li>Search Results</li>
-      </ol>
-      <h2>Search by profession - Results</h2>
+      
+      <h2>Search Potential Matches</h2>
 
-      <div className="search-criteria">
-        <span className="search-criteria-label">Showing </span>
-        {/* Add more span elements with search criteria here */}
-        <form onSubmit={handleSubmit} className="inline-form">
-          <input type="submit" name="submit" value="Refine Search" className="search-button search-button-small" />
-          {/* Add hidden input fields here */}
-        </form>
-      </div>
-
-      <div className="search-row">
-        <div className="search-info search-info-center"></div>
-        <div className="search-info search-info-padding">
-          Showing profiles 11 to 20 of 30+ matches found.<br />
-        </div>
-      </div>
-
-      <div className="search-row">
-        <div className="search-pagination-container">
-          <form onSubmit={handleSubmit}>
-            {/* Add hidden input fields here */}
-            <div className="search-pagination">
-              {/* Add pagination links here */}
-            </div>
-          </form>
-        </div>
-        <div className="search-clearfix"></div>
-        <div className="search-spacer"></div>
-
-        <div className="search-order-container">
-          <form onSubmit={handleSubmit} className="search-form" role="form">
-            Order By:
-            <select name="orderby" className="search-select" onChange={handleOrderChange}>
-              <option value="login">Default</option>
-              <option value="new">Newest Member First</option>
-              <option value="photo" selected>With Photograph First</option>
+      <form onSubmit={handleSubmit} className="search-form">
+        <div className="search-row">
+          <div className="search-field" style={{ width: '150px' }}>
+            <label htmlFor="minAge">Min Age</label>
+            <select id="minAge" name="minAge" value={searchCriteria.minAge} onChange={handleInputChange}>
+              <option value="">Select Min Age</option>
+              {Array.from({ length: 40 }, (_, i) => i + 21).map(age => (
+                <option key={age} value={age}>{age}</option>
+              ))}
             </select>
-            <input type="submit" name="ordersubmitone" id="ordersubmitone" value="Go" className="search-button search-button-small" />
-          </form>
+          </div>
+          <div className="search-field" style={{ width: '150px' }}>
+            <label htmlFor="maxAge">Max Age</label>
+            <select id="maxAge" name="maxAge" value={searchCriteria.maxAge} onChange={handleInputChange}>
+              <option value="">Select Max Age</option>
+              {Array.from({ length: 40 }, (_, i) => i + 21).map(age => (
+                <option key={age} value={age}>{age}</option>
+              ))}
+            </select>
+          </div>
+          <div className="search-field" style={{ width: '200px' }}>
+            <label htmlFor="religion">Religion</label>
+            <select id="religion" name="religion" value={searchCriteria.religion} onChange={handleInputChange}>
+              <option value="">Select Religion</option>
+              <option value="Hindu">Hindu</option>
+              <option value="Muslim">Muslim</option>
+              <option value="Christian">Christian</option>
+              <option value="Sikh">Sikh</option>
+            </select>
+          </div>
+          <div className="search-field" style={{ width: '200px' }}>
+            <label htmlFor="caste">Caste</label>
+            <input type="text" id="caste" name="caste" value={searchCriteria.caste} onChange={handleInputChange} />
+          </div>
+          <div className="search-field" style={{ width: '200px' }}>
+            <label htmlFor="profession">Profession</label>
+            <input type="text" id="profession" name="profession" value={searchCriteria.profession} onChange={handleInputChange} />
+          </div>
         </div>
-        <div className="search-clearfix"></div>
-        <div className="search-spacer"></div>
+        <button type="submit" className="search-button">Search</button>
+      </form>
+
+      <div className="search-results">
+        {currentResults.map(result => (
+          <div key={result.id} className="search-result-item">
+            <h4>{result.name}</h4>
+            <p>Age: {result.age}</p>
+            <p>Religion: {result.religion}</p>
+            <p>Caste: {result.caste}</p>
+            <p>Profession: {result.profession}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Add modal components here */}
-
-      {/* Add profile listing components here */}
-
+      {searchResults.length > resultsPerPage && (
+        <div className="search-pagination">
+          {Array.from({ length: Math.ceil(searchResults.length / resultsPerPage) }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => paginate(i + 1)}
+              className={currentPage === i + 1 ? 'active' : ''}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

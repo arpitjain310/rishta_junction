@@ -1,12 +1,45 @@
 .hero {
+  position: relative;
+  z-index: 1;
   padding: 40px 32px 0;
   align-items: center;
 }
 
+.heroBackground {
+  position: relative;
+}
+
+
+.heroBackground::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../assets/hero1.jpeg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.welcometext, .stats {
+  position: relative;
+  z-index: 2;
+}
+.heroContainer{
+  /* margin-left: 5%; */
+  padding: 5%;
+  margin-right: 5%;
+  display: flex;
+  flex-direction: row;
+}
 .heroTitle {
+  margin-top: 10%;
   color: #000;
   font: 600 36px/52px Inter, sans-serif;
-  margin: 0 0 36px;
+  /* margin: 0 0 36px; */
 }
 
 .heroSubtitle {
@@ -29,9 +62,9 @@
   .stats {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     margin: 64px auto 0;
-    max-width: 85%;
+    max-width: 1200px;
     width: 100%;
   }
 
@@ -40,7 +73,7 @@
     align-items: center;
     gap: 20px;
     width: 280px;
-    margin-bottom: 40px;
+    margin: 0 20px 40px;
   }
 
   .statIcon {
@@ -64,6 +97,17 @@
     margin-top: 8px;
   }
 
+  
+  .welcometext {
+    display: block;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .welcometext {
+      display: none;
+    }
+  }
+  
 
 .products {
   border-radius: 24px;
@@ -277,10 +321,16 @@
 
 .featuresImage {
   flex: 1;
-  max-width: 60%;
- height:700px;
+  max-width: 100%;
+  height: 700px;
 }
 
+@media (max-width: 768px) {
+  .featuresImage {
+    max-width: 300%;
+    height: 450px;
+  }
+}
 
 
 .testimonials {
