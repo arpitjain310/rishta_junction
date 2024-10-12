@@ -22,7 +22,7 @@ const Login = ({ onClose }) => {
     try {
       if (loginMethod === "email") {
         // Login with email and password
-        const response = await axios.post("http://62.72.59.161/api/login", {
+        const response = await axios.post("http://rishtajunction.com/api/login", {
           email,
           password,
         });
@@ -37,7 +37,7 @@ const Login = ({ onClose }) => {
 
       } else {
         // Send mobile number to backend to generate OTP
-        const response = await axios.post("http://62.72.59.161/api/login/send_otp", {
+        const response = await axios.post("http://rishtajunction.com/api/login/send_otp", {
           mobile_number: mobile.toString(),
         });
 
@@ -61,7 +61,7 @@ const Login = ({ onClose }) => {
 
     try {
       // Verify OTP from backend
-      const response = await axios.post("http://62.72.59.161/api/login/verify_otp", {
+      const response = await axios.post("http://rishtajunction.com/api/login/verify_otp", {
         mobile,
         otp,
       });
