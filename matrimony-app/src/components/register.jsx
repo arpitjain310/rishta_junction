@@ -46,7 +46,7 @@ const Register = () => {
     setError("");
     console.log(formData);
     try {
-      const response = await axios.post("http://localhost:8000/api/register", formData);
+      const response = await axios.post("http://62.72.59.161/api/register", formData);
       
       if (response.status === 200) {
         setStep(3); // Move to OTP verification step
@@ -63,7 +63,7 @@ const Register = () => {
     // setOtpData({ ...otpData, isVerified: true });
     
     try {
-      const response = await axios.post("http://localhost:8000/api/verify_otp_and_register", {
+      const response = await axios.post("http://62.72.59.161/api/verify_otp_and_register", {
         mobile_number: formData.mobile_number.toString(),
         otp: otpData.otp.toString(),
       });

@@ -21,12 +21,12 @@ const RishtaJunction = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/search" element={<Search />} />
+            {/* <Route path="/login" element={<Login />} /> */}
+            {/* <Route path="/profile" element={<Profile />} /> */}
+            {/* <Route path="/search" element={<Search />} /> */}
             <Route path="/terms" element={<Terms />} />
           
-            <Route path="/userprofile" element={<UserProfile />} />
+            {/* <Route path="/userprofile" element={<UserProfile />} /> */}
           </Routes>
         </main>
         <Footer />
