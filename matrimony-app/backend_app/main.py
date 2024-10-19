@@ -35,6 +35,6 @@ app.include_router(user_router.router,tags=["users"])
 app.include_router(profile_router.router,tags=["profiles"])
 app.include_router(match_router.router,tags=["matches"])
 
-@app.get("/health-check")
+@app.get("/health_check")
 def root():
     return {"message": "Welcome to Rishta Junction!"}

@@ -1,16 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
-from typing import List
+from typing import List,Dict, Any
 from sqlalchemy.orm import Session
 import models, schemas, db
 from schemas.profile_schema import ProfileCreate, ProfileOut
-
-
+from fastapi.security import OAuth2PasswordBearer
+from utils.auth import get_current_user
+from models.users import User
 
 router = APIRouter()
 
 @router.post("/profiles/", response_model=ProfileOut)
 def create_profile(profile: ProfileCreate, db: Session = Depends(db.get_db)):
-    db_profile = models.profile.Profile(**profile.dict())
+    db_profile = models.profile.Profile(user_id=profile.user_id)
     db.add(db_profile)
     db.commit()
     db.refresh(db_profile)
@@ -27,6 +28,19 @@ def get_profile(user_id: int, db: Session = Depends(db.get_db)):
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
     return profile
+
+@router.put("/profiles/{profile_id}", response_model=ProfileOut)
+def update_profile(profile_id: int, profile_data: Dict[str, Any], db: Session = Depends(db.get_db)):
+    db_profile = db.query(models.profile.Profile).filter(models.profile.Profile.profile_id == profile_id).first()
+    if not db_profile:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    
+    for key, value in profile_data.items():
+        setattr(db_profile, key, value)
+    
+    db.commit()
+    db.refresh(db_profile)
+    return db_profile
 
 @router.get("/profiles/filter/", response_model=List[ProfileOut])
 def get_filtered_profiles(

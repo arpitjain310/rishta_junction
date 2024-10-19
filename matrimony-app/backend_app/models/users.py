@@ -18,6 +18,7 @@ class User(Base):
     otp = Column(String, nullable=True)
     otp_expires_at = Column(DateTime, nullable=True)    
     created_at = Column(DateTime, default=datetime.utcnow)
+    access_token = Column(String, nullable=True)
     
     profiles = relationship("Profile", back_populates="owner")
     

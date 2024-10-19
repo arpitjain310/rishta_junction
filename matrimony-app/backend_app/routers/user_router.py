@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException,status
+from fastapi import APIRouter, Depends, HTTPException,status,Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from datetime import timedelta
@@ -12,6 +12,8 @@ from models.users import User
 from models.profile import Profile
 import random
 from datetime import datetime
+from .profile_router import create_profile
+from schemas.profile_schema import ProfileCreate
 
 router = APIRouter()
 
@@ -61,8 +63,8 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db.add(db_user)
     db.commit()
     
-    # In a real-world scenario, send OTP via SMS here
-    send_otp(otp,user.mobile_number)
+    # Send OTP via SMS here
+    # send_otp(otp,user.mobile_number)
     
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -92,6 +94,10 @@ def verify_otp_and_register(request: OTPVerificationRequest, db: Session = Depen
     db.commit()
     db.refresh(user)
     
+    # Create a profile for the verified user
+    profile_data = ProfileCreate(user_id=user.user_id)
+    create_profile(profile_data, db)
+
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
         content={"success": True, "message": "User registered successfully", }
@@ -110,7 +116,7 @@ def login(login_data: LoginRequest, db: Session = Depends(get_db)):
     if not user.is_verified:
          return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={"success": False, "message": "User verification incomple.Please contact support"}
+            content={"success": False, "message": "User verification incomplete.Please contact support"}
         )
 
     access_token = create_access_token(data={"sub": user.email})
@@ -119,14 +125,13 @@ def login(login_data: LoginRequest, db: Session = Depends(get_db)):
             status_code=status.HTTP_200_OK,
             content={"success": True, 
                      "access_token": access_token, "token_type": "bearer",
-                     "message": "User verification incomple.Please contact support"}
+                     "message": "Login successful"}
         )
 
 
-@router.post("/login/send_otp")
-def send_login_otp(mobile_number: str, db: Session = Depends(get_db)):
+@router.post("/login_send_otp")
+def send_login_otp(mobile_number:str, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.mobile_number == mobile_number).first()
-    
     if not user:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -138,8 +143,9 @@ def send_login_otp(mobile_number: str, db: Session = Depends(get_db)):
     user.otp_expires_at = datetime.utcnow() + timedelta(minutes=10)
     db.commit()
     
-    # In a real-world scenario, send OTP via SMS here
-    
+    # Send OTP via SMS here
+    # send_otp(otp,user.mobile_number)
+
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={"success": True, "message": "OTP sent successfully"}
@@ -177,3 +183,21 @@ def login_with_otp(mobile_number: str, otp: str, db: Session = Depends(get_db)):
         status_code=status.HTTP_200_OK,
         content={"success": True, "access_token": access_token, "token_type": "bearer"}
     )
+
+@router.post("/logout")
+def logout(token: str, db: Session = Depends(get_db)):
+    try:
+        payload = decode_token(token)
+        email = payload.get("sub")
+        user = db.query(User).filter(User.email == email).first()
+        if user:
+            user.access_token = None
+            db.commit()
+            return JSONResponse(
+                status_code=status.HTTP_200_OK,
+                content={"success": True, "message": "Logged out successfully"}
+            )
+        else:
+            raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Invalid token")
