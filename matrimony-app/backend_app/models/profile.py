@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, Boolean, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, Date
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from typing import Optional
@@ -21,12 +21,12 @@ class Profile(Base):
     complexion = Column(String, nullable=True)
     body_type = Column(String, nullable=True)
     marital_status = Column(String, nullable=True)
-    have_children = Column(Boolean, nullable=True)
+    have_children = Column(String, nullable=True)
     diet = Column(String, nullable=True)
-    drink = Column(Boolean, nullable=True)
+    drink = Column(String, nullable=True)
     smoke = Column(String, nullable=True)
     blood_group = Column(String, nullable=True)
-    specially_abled = Column(Boolean, nullable=True)
+    specially_abled = Column(String, nullable=True)
     
     # Family Details
     father_name = Column(String, nullable=True)
@@ -50,7 +50,7 @@ class Profile(Base):
     location_residence = Column(String, nullable=True)
     place_of_birth = Column(String, nullable=True)
     date_of_birth = Column(Date, nullable=True)
-    manglik = Column(Boolean, nullable=True)
+    manglik = Column(String, nullable=True)
     
     owner = relationship("User", back_populates="profiles")
     photos = relationship("Photo", back_populates="profile")

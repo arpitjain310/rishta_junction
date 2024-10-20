@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './RishtaJunction.module.css';
 import icon4 from './../assets/icon4.svg';
 import icon9 from './../assets/icon9.svg';
@@ -10,6 +10,13 @@ import Register from '../pages/register/register';
 
 
 const Hero = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const userId = localStorage.getItem('user_id');
+        const accessToken = localStorage.getItem('accessToken');
+        setIsLoggedIn(!!userId && !!accessToken);
+    }, []);
 
     const statsData = [
         { imgSrc: icon4, number: "Coming Soon", description: "Trusted profiles to be available registered on our platform." },
@@ -34,9 +41,20 @@ const Hero = () => {
                 
                 <button className={styles.ctaButton} onClick={() => window.location.href = '/'}>Register Now</button>
             </div>
-            <div className={styles.registerForm}>
-                <Register />
-            </div>
+            {!isLoggedIn ? (
+                <div className={styles.registerForm}>
+                    <Register />
+                </div>
+            ) : (
+                <div className={styles.loggedinContainer}>
+                    <h3>Welcome to Rishta Junction!</h3>
+                    <div className={styles.userOptions}>
+                        <button onClick={() => window.location.href = '/profile'}>Edit your Profile</button>
+                        <button onClick={() => window.location.href = '/search'}>Find Matches</button>
+                        <button onClick={() => window.location.href = '/support'}>Help</button>
+                    </div>
+                </div>
+            )}
             </div>
            
             <div className={styles.stats}>

@@ -24,12 +24,12 @@ class ProfileFullOut(BaseModel):
     complexion: Optional[str]
     body_type: Optional[str]
     marital_status: Optional[str]
-    have_children: Optional[bool]
+    have_children: Optional[str]
     diet: Optional[str]
-    drink: Optional[bool]
+    drink: Optional[str]
     smoke: Optional[str]
     blood_group: Optional[str]
-    specially_abled: Optional[bool]
+    specially_abled: Optional[str]
     father_name: Optional[str]
     father_occupation: Optional[str]
     mother_name: Optional[str]
@@ -45,7 +45,7 @@ class ProfileFullOut(BaseModel):
     location_residence: Optional[str]
     place_of_birth: Optional[str]
     date_of_birth: Optional[date]
-    manglik: Optional[bool]
+    manglik: Optional[str]
 
     class Config:
         orm_mode = True

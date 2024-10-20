@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './search.css';
 import axios from 'axios';
+import { profileServices } from '../../services/profileServices';
 
 const Search = () => {
   const [searchCriteria, setSearchCriteria] = useState({
@@ -34,8 +35,8 @@ const Search = () => {
         const filteredCriteria = Object.fromEntries(
           Object.entries(searchCriteria).filter(([_, value]) => value !== '')
         );
-        const response = await axios.get('http://localhost:8000/api/profiles/filter', { params: filteredCriteria });
-        setSearchResults(response.data);
+        const data = await profileServices.searchProfiles(filteredCriteria);
+        setSearchResults(data);
         setCurrentPage(1);
       } catch (error) {
         console.error('Error fetching search results:', error);
@@ -49,6 +50,17 @@ const Search = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const createMatch = async (profileId) => {
+    try {
+      let userId = localStorage.getItem("user_id");
+      await profileServices.createMatch(userId, profileId);
+      alert('Match created successfully!');
+    } catch (error) {
+      console.error('Error creating match:', error);
+      alert('An error occurred while creating the match');
+    }
+  };
+
   return (
     <div className="search-container">
       <h2>Search Potential Matches</h2>
@@ -57,11 +69,21 @@ const Search = () => {
         <div className="search-row">
           <div className="search-field">
             <label htmlFor="age_min">Min Age</label>
-            <input type="number" id="age_min" name="age_min" value={searchCriteria.age_min} onChange={handleInputChange} />
+            <select id="age_min" name="age_min" value={searchCriteria.age_min} onChange={handleInputChange}>
+              <option value="">Select Min Age</option>
+              {[...Array(43)].map((_, i) => (
+                <option key={i} value={i + 18}>{i + 18}</option>
+              ))}
+            </select>
           </div>
           <div className="search-field">
             <label htmlFor="age_max">Max Age</label>
-            <input type="number" id="age_max" name="age_max" value={searchCriteria.age_max} onChange={handleInputChange} />
+            <select id="age_max" name="age_max" value={searchCriteria.age_max} onChange={handleInputChange}>
+              <option value="">Select Max Age</option>
+              {[...Array(40)].map((_, i) => (
+                <option key={i} value={i + 21} disabled={parseInt(searchCriteria.age_min) >= (i + 21)}>{i + 21}</option>
+              ))}
+            </select>
           </div>
           <div className="search-field">
             <label htmlFor="gender">Gender</label>
@@ -78,33 +100,52 @@ const Search = () => {
           </div>
           <div className="search-field">
             <label htmlFor="religion">Religion</label>
-            <input type="text" id="religion" name="religion" value={searchCriteria.religion} onChange={handleInputChange} />
+            <select id="religion" name="religion" value={searchCriteria.religion} onChange={handleInputChange}>
+              <option value="">Select Religion</option>
+              <option value="hinduism">Hinduism</option>
+              <option value="islam">Islam</option>
+              <option value="christianity">Christianity</option>
+              <option value="sikhism">Sikhism</option>
+              <option value="buddhism">Buddhism</option>
+              <option value="jainism">Jainism</option>
+              <option value="other">Other</option>
+            </select>
           </div>
-          <div className="search-field">
-            <label htmlFor="caste">Caste</label>
-            <input type="text" id="caste" name="caste" value={searchCriteria.caste} onChange={handleInputChange} />
-          </div>
+          
+         
           <div className="search-field">
             <label htmlFor="profession">Profession</label>
-            <input type="text" id="profession" name="profession" value={searchCriteria.profession} onChange={handleInputChange} />
+            <select id="profession" name="profession" value={searchCriteria.profession} onChange={handleInputChange}>
+              <option value="">Select Profession</option>
+              <option value="engineer">Engineer</option>
+              <option value="doctor">Doctor</option>
+              <option value="teacher">Teacher</option>
+              <option value="lawyer">Lawyer</option>
+              <option value="accountant">Accountant</option>
+              <option value="manager">Manager</option>
+              <option value="entrepreneur">Entrepreneur</option>
+              <option value="artist">Artist</option>
+              <option value="other">Other</option>
+            </select>
           </div>
         </div>
         <button type="submit" className="search-button">Search</button>
       </form>
 
       <div className="search-results">
-        {currentResults.map(result => (
-          <div key={result.id} className="search-result-item">
-            <h4>{result.name}</h4>
-            <p>Age: {result.age}</p>
-            <p>Gender: {result.gender}</p>
-            <p>Location: {result.location}</p>
-            <p>Religion: {result.religion}</p>
-            <p>Caste: {result.caste}</p>
-            <p>Profession: {result.profession}</p>
-          </div>
-        ))}
+  {currentResults.map(result => (
+    <div key={result.id} className="search-result-item">
+      <div className="search-result-content">
+        <h4>{result.name}</h4>
+        <p>Age: {result.age} | Gender: {result.gender}</p>
+        <p>Location: {result.location}</p>
+        <p>Religion: {result.religion} | Caste: {result.caste}</p>
+        <p>Profession: {result.profession}</p>
       </div>
+      <button onClick={() => createMatch(result.user_id)} className="create-match-button">Create Match</button>
+    </div>
+  ))}
+</div>
 
       {searchResults.length > resultsPerPage && (
         <div className="search-pagination">

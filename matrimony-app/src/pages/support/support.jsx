@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Container, Box } from '@mui/material';
+import { profileServices } from '../../services/profileServices';
 
 const Support = () => {
   const [formData, setFormData] = useState({
@@ -21,21 +22,9 @@ const Support = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Placeholder for backend API call
-      const response = await fetch('/api/support', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      if (response.ok) {
-        alert('Support request submitted successfully!');
-        setFormData({ name: '', mobileNumber: '', email: '', request: '' });
-      } else {
-        alert('Failed to submit support request. Please try again.');
-      }
+      await profileServices.submitSupportRequest(formData);
+      alert('Support request submitted successfully!');
+      setFormData({ name: '', mobileNumber: '', email: '', request: '' });
     } catch (error) {
       console.error('Error submitting support request:', error);
       alert('An error occurred. Please try again later.');

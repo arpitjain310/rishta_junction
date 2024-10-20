@@ -5,6 +5,7 @@ import models, schemas, db
 from schemas.profile_schema import ProfileCreate, ProfileOut, ProfileFullOut
 from fastapi.security import OAuth2PasswordBearer
 from models.users import User
+from sqlalchemy.sql import func
 
 router = APIRouter()
 
@@ -41,7 +42,7 @@ def update_profile(profile_id: int, profile_data: Dict[str, Any], db: Session = 
     db.refresh(db_profile)
     return db_profile
 
-@router.get("/profiles/filter/", response_model=List[ProfileOut])
+@router.get("/profiles/filter/", response_model=List[ProfileFullOut])
 def get_filtered_profiles(
     age_min: int = None,
     age_max: int = None,
@@ -59,16 +60,15 @@ def get_filtered_profiles(
     if age_max:
         query = query.filter(models.profile.Profile.age <= age_max)
     if gender:
-        query = query.filter(models.profile.Profile.gender == gender)
+        query = query.filter(func.lower(models.profile.Profile.gender) == gender.lower())
     if location:
-        query = query.filter(models.profile.Profile.location == location)
+        query = query.filter(func.lower(models.profile.Profile.location) == location.lower())
     if religion:
-        query = query.filter(models.profile.Profile.religion == religion)
+        query = query.filter(func.lower(models.profile.Profile.religion) == religion.lower())
     if caste:
-        query = query.filter(models.profile.Profile.caste == caste)
+        query = query.filter(func.lower(models.profile.Profile.caste) == caste.lower())
     if profession:
-        query = query.filter(models.profile.Profile.profession == profession)
-    
+        query = query.filter(func.lower(models.profile.Profile.profession) == profession.lower())    
     filtered_profiles = query.all()
     return filtered_profiles
 

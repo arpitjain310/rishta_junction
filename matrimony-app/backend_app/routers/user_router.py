@@ -14,6 +14,7 @@ import random
 from datetime import datetime
 from .profile_router import create_profile
 from schemas.profile_schema import ProfileCreate
+from jose import ExpiredSignatureError,JWTError
 
 router = APIRouter()
 
@@ -207,24 +208,85 @@ def login_with_otp(mobile_number: str, otp: str, db: Session = Depends(get_db)):
                     "user_id":user.user_id }
     )
 
+@router.post("/forgot-password")
+def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    profile = db.query(Profile).filter(Profile.email == request.email).first()
+    if not profile:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"success": False, "message": "Email not found"}
+        )
+
+    user = db.query(User).filter(User.user_id == profile.user_id).first()
+    if not user:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"success": False, "message": "User not found"}
+        )
+
+    # Generate OTP
+    otp = str(random.randint(100000, 999999))
+    user.otp = otp
+    user.otp_expires_at = datetime.utcnow() + timedelta(minutes=10)
+    db.commit()
+
+    #  send_otp(otp, user.mobile_number)
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"success": True, "message": "Password reset OTP sent successfully"}
+    )
+
+@router.post("/reset-password")
+def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
+    profile = db.query(Profile).filter(Profile.email == request.email).first()
+    if not profile:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"success": False, "message": "Email not found"}
+        )
+
+    user = db.query(User).filter(User.user_id == profile.user_id).first()
+    if not user:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"success": False, "message": "User not found"}
+        )
+
+    if user.otp != request.otp:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"success": False, "message": "Invalid OTP"}
+        )
+
+    if user.otp_expires_at < datetime.utcnow():
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"success": False, "message": "OTP has expired"}
+        )
+
+    # Reset password
+    user.hashed_password = get_password_hash(request.new_password)
+    user.otp = None
+    user.otp_expires_at = None
+    db.commit()
+
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"success": True, "message": "Password reset successfully"}
+    )
+
 @router.post("/logout")
 def logout(token: str, db: Session = Depends(get_db)):
-    try:
-        payload = decode_token(token)
-        print(payload)
-        # email = payload.get("sub")
-        user_id=payload.get("id")
-
-        user = db.query(User).filter(User.user_id == user_id).first()
-        
-        if user:
-            user.access_token = None
-            db.commit()
-            return JSONResponse(
-                status_code=status.HTTP_200_OK,
-                content={"success": True, "message": "Logged out successfully"}
-            )
-        else:
-            raise HTTPException(status_code=404, detail="User not found")
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="Invalid token")
+    
+    user = db.query(User).filter(User.access_token == token).first()
+    
+    if user:
+        user.access_token = None
+        db.commit()
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={"success": True, "message": "Logged out successfully"}
+        )
+    else:
+        raise HTTPException(status_code=404, detail="User not found")

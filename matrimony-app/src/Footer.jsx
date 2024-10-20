@@ -12,7 +12,7 @@ const Footer = () => {
         <nav className={stylesapp.footerNav}>
           <ul className={stylesapp.footerNavList}>
             <li><a href="/terms" className={stylesapp.footerNavItem}>Terms of Service</a></li>
-            <li><a href="#about" className={stylesapp.footerNavItem}>Help</a></li>
+            <li><a href="/support" className={stylesapp.footerNavItem}>Help</a></li>
             <li><a href="/search" className={stylesapp.footerNavItem}>Find your match</a></li>
             <li><a href="/about" className={stylesapp.footerNavItem}>Careers</a></li>
           </ul>

@@ -13,6 +13,7 @@ import UserProfile from './pages/userprofile/userprofile.jsx';
 import AdminPage from './pages/admin/admin.jsx';
 import Support from './pages/support/support.jsx';
 import UserProfileView from './pages/userprofileview/UserProfileView.jsx';
+import PasswordReset from './pages/passwordreset/passwordreset.jsx';
 
 const RishtaJunction = () => {
   return (
@@ -24,6 +25,7 @@ const RishtaJunction = () => {
             <Route path="/" element={<LandingPage />} />
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/userprofile/:userId" element={<UserProfileView />} />
+            <Route path="/passwordreset" element={<PasswordReset />} />
             <Route path="/search" element={<Search />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/terms" element={<Terms />} />

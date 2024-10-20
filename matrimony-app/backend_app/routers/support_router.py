@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import List
 from db import get_db
@@ -6,10 +6,15 @@ from models.support_request import SupportRequest
 from schemas.support_schema import SupportRequestCreate, SupportRequestOut
 
 router = APIRouter()
-
-@router.post("/support-request/", response_model=SupportRequestOut)
-def create_support_request(request: SupportRequestCreate, db: Session = Depends(get_db)):
-    new_request = SupportRequest(**request.dict())
+@router.post("/support-request", response_model=SupportRequestOut)
+async def create_support_request(request: Request, db: Session = Depends(get_db)):
+    form_data = await request.form()
+    new_request = SupportRequest(
+        name=form_data.get("name"),
+        mobile_number=form_data.get("mobileNumber"),
+        email=form_data.get("email"),
+        request=form_data.get("request")
+    )
     db.add(new_request)
     db.commit()
     db.refresh(new_request)

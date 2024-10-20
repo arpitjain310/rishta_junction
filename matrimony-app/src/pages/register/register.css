@@ -55,6 +55,11 @@ h2 {
   flex-direction: column; /* Stack children vertically */
 }
 
+.submitPwdBtn{
+  display: flex;
+  margin-left: -20%;
+}
+
 .otp-verification {
   display: flex;
   flex-direction: column;
@@ -72,6 +77,7 @@ h2 {
   background-color: #ee4248;
   color: white;
   border: none;
+  margin-right: 20%;
   padding: 10px 20px;
   border-radius: 5px;
   font-size: 16px;
@@ -133,7 +139,7 @@ select {
 }
 
 .register-btn {
-  background-color: #ee4248; /* Button background color */
+  
   color: white; /* Text color */
   border: none; /* No border */
   padding: 10px; /* Padding inside button */

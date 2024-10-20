@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import user_router, profile_router, match_router
+from routers import user_router, profile_router, match_router, support_router
 from db import Base, engine
 from models.users import User
 from models.profile import  Profile
@@ -34,6 +34,7 @@ Base.metadata.create_all(bind=engine)
 app.include_router(user_router.router,tags=["users"])
 app.include_router(profile_router.router,tags=["profiles"])
 app.include_router(match_router.router,tags=["matches"])
+app.include_router(support_router.router,tags=["support_request"])
 
 @app.get("/health_check")
 def root():

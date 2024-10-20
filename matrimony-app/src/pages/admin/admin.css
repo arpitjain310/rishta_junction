@@ -1,0 +1,53 @@
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .admin-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+  }
+  
+  .section-title {
+    color: #34495e;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+  
+  .ant-table-wrapper {
+    margin-bottom: 40px;
+  }
+  
+  .ant-table-thead > tr > th {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .ant-table-tbody > tr:hover > td {
+    background-color: #f0f8ff;
+  }
+  
+  .action-button {
+    margin-right: 10px;
+  }
+  
+  .ant-modal-title {
+    color: #2c3e50;
+  }
+  
+  .ant-form-item-label > label {
+    color: #34495e;
+  }
+  
+  .ant-btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+  }
+  
+  .ant-btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+  }
+  

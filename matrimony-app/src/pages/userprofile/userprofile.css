@@ -46,6 +46,39 @@
     padding: 8px;
     border-radius: 5px;
   }
+
+  .profile-info input,
+.profile-info select,
+.profile-info textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.profile-info label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.profile-info button {
+ 
+  padding: 10px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-info button:hover {
+  background-color: #2980b9;
+}
   
   @media (max-width: 768px) {
     .profile-info {

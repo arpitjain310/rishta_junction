@@ -1,6 +1,7 @@
   import React, { useState, useEffect } from 'react';
   import { Table, Button, Modal, Form, Input, message } from 'antd';
   import axios from 'axios';
+  import './admin.css'; 
 
   const AdminPage = () => {
     const [users, setUsers] = useState([]);
@@ -82,21 +83,16 @@
       { title: 'Email', dataIndex: 'email', key: 'email' },
       { title: 'Gender', dataIndex: 'gender', key: 'gender' },
       { title: 'Age', dataIndex: 'age', key: 'age' },
-      { title: 'Height', dataIndex: 'height', key: 'height' },
-      { title: 'Weight', dataIndex: 'weight', key: 'weight' },
-      { title: 'Location', dataIndex: 'location', key: 'location' },
-      { title: 'Interests', dataIndex: 'interests', key: 'interests' },
-      { title: 'About', dataIndex: 'about', key: 'about' },
-      { title: 'Profile Picture', dataIndex: 'profile_picture', key: 'profile_picture' },
+      
       { title: 'Created At', dataIndex: 'created_at', key: 'created_at' },
-      { title: 'Updated At', dataIndex: 'updated_at', key: 'updated_at' },
+      
       {
         title: 'Actions',
         key: 'actions',
         render: (_, record) => (
           <>
-            <Button onClick={() => { setCurrentUser(record); setIsUserModalVisible(true); }}>Update</Button>
-            <Button onClick={() => handleDeleteUser(record.profile_id)} danger>Delete</Button>
+            <Button className="action-button" onClick={() => { setCurrentUser(record); setIsUserModalVisible(true); }}>Update</Button>
+            <Button className="action-button" onClick={() => handleDeleteUser(record.profile_id)} danger>Delete</Button>
           </>
         ),
       },
@@ -112,22 +108,22 @@
         key: 'actions',
         render: (_, record) => (
           <>
-            <Button onClick={() => { setCurrentMatch(record); setIsMatchModalVisible(true); }}>Update</Button>
-            <Button onClick={() => handleDeleteMatch(record.matcher_id)} danger>Delete</Button>
+            <Button className="action-button" onClick={() => { setCurrentMatch(record); setIsMatchModalVisible(true); }}>Update</Button>
+            <Button className="action-button" onClick={() => handleDeleteMatch(record.matcher_id)} danger>Delete</Button>
           </>
         ),
       },
     ];
 
     return (
-      <div>
-        <h1>Admin Dashboard</h1>
-      
-        <h2>Users</h2>
-        <Table dataSource={users} columns={userColumns} rowKey="profile_id" />
+      <div className="admin-container">
+      <h1 className="admin-title">Admin Dashboard</h1>
+    
+      <h2 className="section-title">Profiles</h2>
+      <Table dataSource={users} columns={userColumns} rowKey="profile_id" />
 
-        <h2>Matches</h2>
-        <Table dataSource={matches} columns={matchColumns} rowKey="matcher_id" />
+      <h2 className="section-title">Matches</h2>
+      <Table dataSource={matches} columns={matchColumns} rowKey="matcher_id" />
 
         <Modal
           title="Update User"

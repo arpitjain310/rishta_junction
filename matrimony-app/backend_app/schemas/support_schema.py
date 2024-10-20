@@ -4,7 +4,7 @@ from datetime import datetime
 class SupportRequestCreate(BaseModel):
     name: str
     email: str
-    mobile_number: str
+    mobile_number: int
     request_text: str
 
 class SupportRequestOut(SupportRequestCreate):

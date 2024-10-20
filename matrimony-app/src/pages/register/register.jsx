@@ -1,18 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { userServices } from "../../services/userServices";
-import axios from "axios";
 import './register.css';
 import back from '../../assets/back.svg';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     password: "",
     gender: "",
     looking_for: "",
-    date_of_birth: "",
     mobile_number: "",
   });
   const [otpData, setOtpData] = useState({
@@ -56,12 +53,32 @@ const Register = () => {
 
   const handleOtpVerification = async () => {
     try {
-      await userServices.verifyOtpAndRegister(formData.mobile_number, otpData.otp);
+      const response = await userServices.verifyOtpAndRegister(formData.mobile_number, otpData.otp);
       setOtpData({ ...otpData, isVerified: true });
+      
+      // Store user id and access token in localStorage
+      localStorage.setItem('user_id', response.user_id);
+      localStorage.setItem('accessToken', response.access_token);
+      window.location.href = '/profile';
     } catch (err) {
       console.error(err);
       setOtpData({ ...otpData, verificationError: "An error occurred during verification. Please try again." });
     }
+  };
+
+  const generatePassword = () => {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    let password = ''
+    for (let i = 0; i < 7; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    if (!/[a-zA-Z]/.test(password)) {
+      password = 'a' + password.slice(1)
+    }
+    if (!/\d/.test(password)) {
+      password = password.slice(0, -1) + '1'
+    }
+    handleChange({ target: { name: 'password', value: password } })
   };
 
   return (
@@ -69,13 +86,13 @@ const Register = () => {
       <div className="register-container-heading">
         <h2>Create your matrimony account</h2>
       </div>
-      
+
       {step === 2 && (
         <div className="registerBackBtncontainer" onClick={handleBack}>
-        <img src={back}  className="registerBackBtn" alt="" />
-        <div className="registerBackText">
-          Back
-        </div>
+          <img src={back} className="registerBackBtn" alt="" />
+          <div className="registerBackText">
+            Back
+          </div>
         </div>
       )}
 
@@ -84,7 +101,7 @@ const Register = () => {
           {otpData.isVerified ? (
             <div className="otpverifiedsection">
               <p>OTP verified successfully!</p>
-              <button className="happyJourney" onClick={() => window.location.href = '/'}>Start your happy journey now</button>
+              <p>Redirecting to home page...</p>
             </div>
           ) : (
             <>
@@ -95,7 +112,7 @@ const Register = () => {
                 onChange={(e) => setOtpData({ ...otpData, otp: e.target.value })}
                 placeholder="Enter OTP"
               />
-              <button onClick={handleOtpVerification}>Verify OTP</button>
+              <button className="submit-otp-btn" onClick={handleOtpVerification}>Verify OTP</button>
               {otpData.verificationError && <p className="error-text">{otpData.verificationError}</p>}
             </>
           )}
@@ -106,19 +123,30 @@ const Register = () => {
         <form onSubmit={step === 1 ? handleNext : handleSubmit}>
           {step === 1 ? (
             <>
-              <div>
-                <label>Looking a match for</label>
-                <select name="looking_for" value={formData.looking_for} onChange={handleChange} required>
-                  <option value="">Select</option>
-                  <option value="Myself">Myself</option>
-                  <option value="Brother">Brother</option>            
-                  <option value="Daughter">Daughter</option>
-                  <option value="Son">Son</option>
-                  <option value="Sister">Sister</option>            
-                  <option value="Friend">Friend</option> 
-                </select>
-              </div>
 
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  <label>Looking a match for</label>
+                  <select name="looking_for" value={formData.looking_for} onChange={handleChange} required>
+                    <option value="">Select</option>
+                    <option value="Myself">Myself</option>
+                    <option value="Brother">Brother</option>
+                    <option value="Daughter">Daughter</option>
+                    <option value="Son">Son</option>
+                    <option value="Sister">Sister</option>
+                    <option value="Friend">Friend</option>
+                  </select>
+                </div>
+                <div style={{ width: '48%' }}>
+                  <label>Gender</label>
+                  <select name="gender" value={formData.gender} onChange={handleChange} required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
               <div>
                 <label>Name</label>
                 <input
@@ -148,7 +176,7 @@ const Register = () => {
               <div>
                 <label>Password</label>
                 <input
-                  type="password"
+                  type="text"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -157,41 +185,12 @@ const Register = () => {
                   title="Password must be at least 5 characters long and contain at least 1 number"
                 />
               </div>
-              <div>
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
+              <div className="submitPwdBtn">
+                <button type="button" className="generatePwdButton" onClick={generatePassword}>Generate a Password</button>
+
+                <button type="submit" className="register-btn">Register</button>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div style={{ width: '48%' }}>
-                  <label>Gender</label>
-                  <select name="gender" value={formData.gender} onChange={handleChange} required>
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-
-                <div style={{ width: '48%' }}>
-                  <label>Date of Birth</label>
-                  <input
-                    type="date"
-                    name="date_of_birth"
-                    value={formData.date_of_birth}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <button type="submit" className="register-btn">Register</button>
             </>
           )}
         </form>

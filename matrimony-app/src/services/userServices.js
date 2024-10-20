@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = "http://localhost:8000/api"
 
 export const userServices = {
   login: async (email, password) => {
@@ -33,5 +33,20 @@ export const userServices = {
       otp: otp.toString(),
     });
     return response.data;
-  }
+  },
+  forgotPassword: async (email) => {
+    const response = await axios.post(`${API_URL}/forgot-password`, { email });
+    return response.data;
+  },
+  
+  resetPassword: async (email, otp, new_password) => {
+    const response = await axios.post(`${API_URL}/reset-password`, { email, otp, new_password });
+    return response.data;
+  },
+  logout: async (token) => {
+    const response = await axios.post(`${API_URL}/logout`, {}, {
+      params: { token }
+    });
+    return response.data;
+  },
 };

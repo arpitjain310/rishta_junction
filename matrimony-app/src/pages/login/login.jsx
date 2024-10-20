@@ -102,6 +102,9 @@ const Login = ({ onClose, onLoginSuccess }) => {
                     required
                   />
                 </div>
+                <button onClick={window.location.href="/resetPassword"}>
+                  Forget Password
+                </button>
               </>
             ) : (
               <div>

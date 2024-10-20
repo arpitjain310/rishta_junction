@@ -62,3 +62,11 @@ class UserSearch(BaseModel):
 class UserSearchResult(BaseModel):
     users: List[UserOut]
     total_count: int
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    email: str
+    otp: str
+    new_password: str

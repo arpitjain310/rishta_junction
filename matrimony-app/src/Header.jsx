@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import stylesapp from './stylesmain.module.css';
 import logo from './assets/logo.jpeg';
 import Login from './pages/login/login.jsx';
-import axios from 'axios';
+import { userServices } from './services/userServices';
 
 const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -30,10 +31,10 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      await axios.post('http://localhost:8000/logout', {}, {
-        params: { token:token }
-      });
+      
+      await userServices.logout(token);
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('user_id');
       setIsLoggedIn(false);
       window.location.href = '/';
     } catch (error) {
