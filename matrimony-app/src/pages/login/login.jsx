@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { userServices } from "../../services/userServices";
 import axios from "axios";
 import './login.css';
 import cross from '../../assets/cross.png';
 
-const Login = ({ onClose }) => {
+const Login = ({ onClose, onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
@@ -21,37 +22,19 @@ const Login = ({ onClose }) => {
 
     try {
       if (loginMethod === "email") {
-        // Login with email and password
-        const response = await axios.post("http://rishtajunction.com/api/login", {
-          email,
-          password,
-        });
-      
-        if (response.status === 200) {
-          // Redirect to the homepage on successful login
-          navigate("/");
-        } else if (response.status === 400){
-          setError(response.data.message)
-          // setError("Login failed. Please check your credentials.");
-        }
-
+        const data = await userServices.login(email, password);
+        localStorage.setItem("accessToken", data.access_token);
+        onLoginSuccess();
+        onClose();
+        window.location.href = '/profile';
+        
       } else {
-        // Send mobile number to backend to generate OTP
-        const response = await axios.post("http://rishtajunction.com/api/login/send_otp", {
-          mobile_number: mobile.toString(),
-        });
-
-        if (response.status === 200) {
-          // OTP has been sent, ask user to input OTP
-          setOtpSent(true);
-        } else {
-          setError("Failed to send OTP. Please try again.");
-        }
+        const data = await userServices.sendLoginOtp(mobile);
+        setOtpSent(true);
       }
     } catch (err) {
       console.error(err);
-      setError(err.response.data.message)
-      // setError("An error occurred. Please try again.");
+      setError(err.response?.data?.message || "An error occurred. Please try again.");
     }
   };
 
@@ -60,22 +43,14 @@ const Login = ({ onClose }) => {
     setError("");
 
     try {
-      // Verify OTP from backend
-      const response = await axios.post("http://rishtajunction.com/api/login/verify_otp", {
-        mobile,
-        otp,
-      });
-
-      if (response.status===200) {
-        // Redirect to the homepage on successful OTP verification
-        navigate("/");
-      } else if(response.status === 400){
-        setError(response.data.message)
-        setOtpSent(false); // Reset OTP flow if failed
-      }
+      const data = await userServices.verifyLoginOtp(mobile, otp);
+      localStorage.setItem("accessToken", data.accessToken);
+      onLoginSuccess();
+      onClose();
+      window.location.href = '/profile';
     } catch (err) {
-      setError(err.response.data.message);
-      setError("An error occurred. Please try again.");
+      setError(err.response?.data?.message || "An error occurred. Please try again.");
+      setOtpSent(false);
     }
   };
 

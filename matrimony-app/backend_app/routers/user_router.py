@@ -21,12 +21,13 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 @router.post("/register")
 def register(user: UserCreate, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(User.email == user.email).first()
-    if existing_user:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"success": False, "message": "Email address is already registered"}
-        )
+    # existing_user = db.query(User).filter(User.email == user.email).first()
+
+    # if existing_user:
+    #     return JSONResponse(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         content={"success": False, "message": "Email address is already registered"}
+    #     )
     
     existing_mobile = db.query(User).filter(User.mobile_number == user.mobile_number).first()
     if existing_mobile:
@@ -49,13 +50,12 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     
     db_user = User(
         name=user.name,
-        email=user.email,
         mobile_number=user.mobile_number,
         hashed_password=hashed_password,
         gender=user.gender,
         looking_for=user.looking_for,
-        date_of_birth=user.date_of_birth,
         is_verified=False,
+        user_type="User",
         otp=otp,
         otp_expires_at=otp_expires_at
     )
@@ -95,7 +95,7 @@ def verify_otp_and_register(request: OTPVerificationRequest, db: Session = Depen
     db.refresh(user)
     
     # Create a profile for the verified user
-    profile_data = ProfileCreate(user_id=user.user_id)
+    profile_data = ProfileCreate(user_id=user.user_id,gender=user.gender)
     create_profile(profile_data, db)
 
     return JSONResponse(
@@ -105,21 +105,31 @@ def verify_otp_and_register(request: OTPVerificationRequest, db: Session = Depen
 
 @router.post("/login")
 def login(login_data: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == login_data.email).first()
+    profile = db.query(Profile).filter(Profile.email == login_data.email).first()
     
+    if not profile:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"success": False, "message": "Email not found"}
+        )
+
+    user = db.query(User).filter(User.user_id == profile.user_id).first()
+
     if not user or not verify_password(login_data.password, user.hashed_password):
-         return JSONResponse(
+        return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"success": False, "message": "Invalid credentials"}
         )
 
     if not user.is_verified:
-         return JSONResponse(
+        return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
-            content={"success": False, "message": "User verification incomplete.Please contact support"}
+            content={"success": False, "message": "User verification incomplete. Please contact support"}
         )
 
-    access_token = create_access_token(data={"sub": user.email})
+    access_token = create_access_token(data={"sub": profile.email,"id":user.user_id})
+    user.access_token = access_token
+    db.commit()
 
     return JSONResponse(
             status_code=status.HTTP_200_OK,
@@ -127,7 +137,6 @@ def login(login_data: LoginRequest, db: Session = Depends(get_db)):
                      "access_token": access_token, "token_type": "bearer",
                      "message": "Login successful"}
         )
-
 
 @router.post("/login_send_otp")
 def send_login_otp(mobile_number:str, db: Session = Depends(get_db)):
@@ -178,7 +187,10 @@ def login_with_otp(mobile_number: str, otp: str, db: Session = Depends(get_db)):
     user.otp_expires_at = None
     db.commit()
     
-    access_token = create_access_token(data={"sub": user.email})
+    profile=db.query(Profile).filter(Profile.user_id == user.user_id).first()
+
+    access_token = create_access_token(data={"sub": profile.email,"id":user.user_id})
+
     return JSONResponse(
         status_code=status.HTTP_200_OK,
         content={"success": True, "access_token": access_token, "token_type": "bearer"}
@@ -188,8 +200,12 @@ def login_with_otp(mobile_number: str, otp: str, db: Session = Depends(get_db)):
 def logout(token: str, db: Session = Depends(get_db)):
     try:
         payload = decode_token(token)
+        print(payload)
         email = payload.get("sub")
-        user = db.query(User).filter(User.email == email).first()
+        user_id=payload.get("id")
+
+        user = db.query(User).filter(User.user_id == user_id).first()
+        
         if user:
             user.access_token = None
             db.commit()

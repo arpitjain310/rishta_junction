@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, Boolean, Date
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from typing import Optional
-
 from db import Base
 
 class Profile(Base):
@@ -11,29 +10,47 @@ class Profile(Base):
     profile_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.user_id'), nullable=False)
     
-    # New fields
+    # Person for whom profile is created
+    name = Column(String, nullable=True)
+    gender = Column(String, nullable=False)
+    email = Column(String, nullable=True)
+    
+    # Personal Details
     age = Column(Integer, nullable=True)
-    gender = Column(String, nullable=True)  # dropdown
-    height = Column(Float, nullable=True)  # text field
-    complexion = Column(String, nullable=True)  # text field
-    body_type = Column(String, nullable=True)  # text field
-    marital_status = Column(String, nullable=True)  # dropdown
-    have_children = Column(Boolean, nullable=True)  # radio button (yes/no)
-    diet = Column(String, nullable=True)  # veg/non-veg (dropdown)
-    drink = Column(Boolean, nullable=True)  # radio button (yes/no)
-    smoke = Column(String, nullable=True)  # dropdown
-    blood_group = Column(String, nullable=True)  # dropdown
-    specially_abled = Column(Boolean, nullable=True)  # yes/no (radio button)
+    height = Column(Float, nullable=True)
+    complexion = Column(String, nullable=True)
+    body_type = Column(String, nullable=True)
+    marital_status = Column(String, nullable=True)
+    have_children = Column(Boolean, nullable=True)
+    diet = Column(String, nullable=True)
+    drink = Column(Boolean, nullable=True)
+    smoke = Column(String, nullable=True)
+    blood_group = Column(String, nullable=True)
+    specially_abled = Column(Boolean, nullable=True)
     
-    education = Column(String, nullable=True)  # dropdown
-    profession = Column(String, nullable=True)  # dropdown
-    religion = Column(String, nullable=True)  # dropdown
-    caste = Column(String, nullable=True)  # dropdown
+    # Family Details
+    father_name = Column(String, nullable=True)
+    father_occupation = Column(String, nullable=True)
+    mother_name = Column(String, nullable=True)
+    mother_occupation = Column(String, nullable=True)
     
-    location_residence = Column(String, nullable=True)  # text field
-    place_of_birth = Column(String, nullable=True)  # text field
-    date_of_birth = Column(DateTime, nullable=True)  # calendar
-    manglik = Column(Boolean, nullable=True)  # yes/no (radio button)
+    # Sibling Details
+    sibling_count = Column(Integer, nullable=True)
+    sibling_married = Column(String, nullable=True)
+    sibling_details = Column(String, nullable=True)
+    
+    # Professional & Financial Information
+    education = Column(String, nullable=True)
+    profession = Column(String, nullable=True)
+    income = Column(String, nullable=True)
+    
+    # Additional Details
+    religion = Column(String, nullable=True)
+    caste = Column(String, nullable=True)
+    location_residence = Column(String, nullable=True)
+    place_of_birth = Column(String, nullable=True)
+    date_of_birth = Column(Date, nullable=True)
+    manglik = Column(Boolean, nullable=True)
     
     owner = relationship("User", back_populates="profiles")
     photos = relationship("Photo", back_populates="profile")

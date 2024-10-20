@@ -4,11 +4,9 @@ from typing import Optional, List
 
 class UserCreate(BaseModel):
     name: str
-    email: EmailStr
     password: str
     gender: str
     looking_for: str
-    date_of_birth: date  # Ensure this is a valid date in 'YYYY-MM-DD' format
     mobile_number: str
 
 class UserOut(BaseModel):

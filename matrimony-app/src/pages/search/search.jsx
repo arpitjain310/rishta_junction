@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import './search.css';
+import axios from 'axios';
 
 const Search = () => {
   const [searchCriteria, setSearchCriteria] = useState({
-    minAge: '',
-    maxAge: '',
+    age_min: '',
+    age_max: '',
+    gender: '',
+    location: '',
     religion: '',
     caste: '',
     profession: ''
@@ -19,22 +22,26 @@ const Search = () => {
     setSearchCriteria(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically make an API call with the search criteria
-    console.log('Search criteria:', searchCriteria);
-    // Mock search results
-    const mockResults = Array.from({ length: 25 }, (_, i) => ({
-      id: i + 1,
-      name: `Person ${i + 1}`,
-      age: Math.floor(Math.random() * (50 - 18 + 1)) + 18,
-      religion: ['Hindu', 'Muslim', 'Christian', 'Sikh'][Math.floor(Math.random() * 4)],
-      caste: ['Brahmin', 'Kshatriya', 'Vaishya', 'Shudra', 'N/A'][Math.floor(Math.random() * 5)],
-      profession: ['Engineer', 'Doctor', 'Teacher', 'Lawyer', 'Entrepreneur'][Math.floor(Math.random() * 5)]
-    }));
-    setSearchResults(mockResults);
-    setCurrentPage(1);
-  };
+    
+    // Check if at least one filter is selected
+    if (Object.values(searchCriteria).every(value => value === '')) {
+      alert('Please select at least one filter');
+      return;
+    }
+      try {
+        const filteredCriteria = Object.fromEntries(
+          Object.entries(searchCriteria).filter(([_, value]) => value !== '')
+        );
+        const response = await axios.get('http://localhost:8000/api/profiles/filter', { params: filteredCriteria });
+        setSearchResults(response.data);
+        setCurrentPage(1);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+        alert('An error occurred while fetching search results');
+      }
+    };
 
   const indexOfLastResult = currentPage * resultsPerPage;
   const indexOfFirstResult = indexOfLastResult - resultsPerPage;
@@ -44,44 +51,40 @@ const Search = () => {
 
   return (
     <div className="search-container">
-      
       <h2>Search Potential Matches</h2>
 
       <form onSubmit={handleSubmit} className="search-form">
         <div className="search-row">
-          <div className="search-field" style={{ width: '150px' }}>
-            <label htmlFor="minAge">Min Age</label>
-            <select id="minAge" name="minAge" value={searchCriteria.minAge} onChange={handleInputChange}>
-              <option value="">Select Min Age</option>
-              {Array.from({ length: 40 }, (_, i) => i + 21).map(age => (
-                <option key={age} value={age}>{age}</option>
-              ))}
+          <div className="search-field">
+            <label htmlFor="age_min">Min Age</label>
+            <input type="number" id="age_min" name="age_min" value={searchCriteria.age_min} onChange={handleInputChange} />
+          </div>
+          <div className="search-field">
+            <label htmlFor="age_max">Max Age</label>
+            <input type="number" id="age_max" name="age_max" value={searchCriteria.age_max} onChange={handleInputChange} />
+          </div>
+          <div className="search-field">
+            <label htmlFor="gender">Gender</label>
+            <select id="gender" name="gender" value={searchCriteria.gender} onChange={handleInputChange}>
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
             </select>
           </div>
-          <div className="search-field" style={{ width: '150px' }}>
-            <label htmlFor="maxAge">Max Age</label>
-            <select id="maxAge" name="maxAge" value={searchCriteria.maxAge} onChange={handleInputChange}>
-              <option value="">Select Max Age</option>
-              {Array.from({ length: 40 }, (_, i) => i + 21).map(age => (
-                <option key={age} value={age}>{age}</option>
-              ))}
-            </select>
+          <div className="search-field">
+            <label htmlFor="location">Location</label>
+            <input type="text" id="location" name="location" value={searchCriteria.location} onChange={handleInputChange} />
           </div>
-          <div className="search-field" style={{ width: '200px' }}>
+          <div className="search-field">
             <label htmlFor="religion">Religion</label>
-            <select id="religion" name="religion" value={searchCriteria.religion} onChange={handleInputChange}>
-              <option value="">Select Religion</option>
-              <option value="Hindu">Hindu</option>
-              <option value="Muslim">Muslim</option>
-              <option value="Christian">Christian</option>
-              <option value="Sikh">Sikh</option>
-            </select>
+            <input type="text" id="religion" name="religion" value={searchCriteria.religion} onChange={handleInputChange} />
           </div>
-          <div className="search-field" style={{ width: '200px' }}>
+          <div className="search-field">
             <label htmlFor="caste">Caste</label>
             <input type="text" id="caste" name="caste" value={searchCriteria.caste} onChange={handleInputChange} />
           </div>
-          <div className="search-field" style={{ width: '200px' }}>
+          <div className="search-field">
             <label htmlFor="profession">Profession</label>
             <input type="text" id="profession" name="profession" value={searchCriteria.profession} onChange={handleInputChange} />
           </div>
@@ -94,6 +97,8 @@ const Search = () => {
           <div key={result.id} className="search-result-item">
             <h4>{result.name}</h4>
             <p>Age: {result.age}</p>
+            <p>Gender: {result.gender}</p>
+            <p>Location: {result.location}</p>
             <p>Religion: {result.religion}</p>
             <p>Caste: {result.caste}</p>
             <p>Profession: {result.profession}</p>

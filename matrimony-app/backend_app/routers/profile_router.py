@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import List,Dict, Any
 from sqlalchemy.orm import Session
 import models, schemas, db
-from schemas.profile_schema import ProfileCreate, ProfileOut
+from schemas.profile_schema import ProfileCreate, ProfileOut, ProfileFullOut
 from fastapi.security import OAuth2PasswordBearer
 from models.users import User
 
@@ -10,19 +10,19 @@ router = APIRouter()
 
 @router.post("/create_profile/", response_model=ProfileOut)
 def create_profile(profile: ProfileCreate, db: Session = Depends(db.get_db)):
-    db_profile = models.profile.Profile(user_id=profile.user_id)
+    db_profile = models.profile.Profile(user_id=profile.user_id,gender=profile.gender)
     db.add(db_profile)
     db.commit()
     db.refresh(db_profile)
     return db_profile
 
-@router.get("/get_all_profiles/", response_model=List[ProfileOut])
+@router.get("/get_all_profiles/", response_model=List[ProfileFullOut])
 def get_all_profiles(db: Session = Depends(db.get_db)):
     db_profiles = db.query(models.profile.Profile).all()
     return db_profiles
 
 @router.get("/get_profile/{user_id}")
-def get_profile(user_id: int, db: Session = Depends(db.get_db)):
+def get_profile(user_id: str, db: Session = Depends(db.get_db)):
     profile = db.query(models.profile.Profile).filter(models.profile.Profile.user_id == user_id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
@@ -47,6 +47,9 @@ def get_filtered_profiles(
     age_max: int = None,
     gender: str = None,
     location: str = None,
+    religion: str = None,
+    caste: str = None,
+    profession: str = None,
     db: Session = Depends(db.get_db)
 ):
     query = db.query(models.profile.Profile)
@@ -59,15 +62,23 @@ def get_filtered_profiles(
         query = query.filter(models.profile.Profile.gender == gender)
     if location:
         query = query.filter(models.profile.Profile.location == location)
+    if religion:
+        query = query.filter(models.profile.Profile.religion == religion)
+    if caste:
+        query = query.filter(models.profile.Profile.caste == caste)
+    if profession:
+        query = query.filter(models.profile.Profile.profession == profession)
     
     filtered_profiles = query.all()
     return filtered_profiles
 
-@router.delete("/delete_profile/{profile_id}", response_model=ProfileOut)
+
+@router.delete("/delete_profile/{profile_id}", response_model=Dict[str, Any])
 def delete_profile(profile_id: int, db: Session = Depends(db.get_db)):
     profile = db.query(models.profile.Profile).filter(models.profile.Profile.profile_id == profile_id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
+    
     db.delete(profile)
     db.commit()
-    return profile
+    return {"message": "Profile deleted successfully"}

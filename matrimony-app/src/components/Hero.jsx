@@ -6,8 +6,7 @@ import icon1 from './../assets/icon1.svg';
 import icon6 from './../assets/icon6.svg';
 import icon8 from './../assets/icon8.svg';
 import icon2 from './../assets/icon2.svg';
-import hero1 from './../assets/hero1.jpeg';
-import Register from './register';
+import Register from '../pages/register/register';
 
 
 const Hero = () => {

@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import stylesapp from './stylesmain.module.css';
 import logo from './assets/logo.jpeg';
-import Login from './pages/login/login.jsx'; // Assuming you have a Login component
+import Login from './pages/login/login.jsx';
+import axios from 'axios';
 
 const Header = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleLoginClick = () => {
     setShowLogin(true);
@@ -14,6 +21,24 @@ const Header = () => {
   const handleCloseLogin = () => {
     setShowLogin(false);
     document.body.style.overflow = 'auto';
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      await axios.post('http://localhost:8000/logout', {}, {
+        params: { token:token }
+      });
+      localStorage.removeItem('accessToken');
+      setIsLoggedIn(false);
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (
@@ -32,16 +57,22 @@ const Header = () => {
           </ul>
         </div>
         <div className={stylesapp.loginContainer}>
-          <button className={stylesapp.loginButton} onClick={handleLoginClick}>
-            Login
-          </button>
+          {isLoggedIn ? (
+            <button className={stylesapp.loginButton} onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <button className={stylesapp.loginButton} onClick={handleLoginClick}>
+              Login
+            </button>
+          )}
         </div>
       </div>
 
       {showLogin && (
          <div className={stylesapp.modalOverlay}>
          <div className={stylesapp.modalContent}>
-           <Login onClose={handleCloseLogin} />
+           <Login onClose={handleCloseLogin} onLoginSuccess={handleLoginSuccess}/>
          </div>
        </div>
 
