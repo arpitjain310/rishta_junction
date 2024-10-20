@@ -97,10 +97,16 @@ def verify_otp_and_register(request: OTPVerificationRequest, db: Session = Depen
     # Create a profile for the verified user
     profile_data = ProfileCreate(user_id=user.user_id,gender=user.gender)
     create_profile(profile_data, db)
+    access_token = create_access_token(data={"id":user.user_id})
+    user.access_token = access_token
+    db.commit()
 
     return JSONResponse(
         status_code=status.HTTP_201_CREATED,
-        content={"success": True, "message": "User registered successfully", }
+        content={"success": True, 
+                 "message": "User registered successfully", 
+                 "access_token": access_token,
+                 "user_id":user.user_id}
     )
 
 @router.post("/login")
@@ -185,15 +191,20 @@ def login_with_otp(mobile_number: str, otp: str, db: Session = Depends(get_db)):
     # Clear the OTP after successful login
     user.otp = None
     user.otp_expires_at = None
-    db.commit()
     
-    profile=db.query(Profile).filter(Profile.user_id == user.user_id).first()
-
-    access_token = create_access_token(data={"sub": profile.email,"id":user.user_id})
+    profile = db.query(Profile).filter(Profile.user_id == user.user_id).first()
+    if profile and profile.email:
+        access_token = create_access_token(data={"sub": profile.email, "id": user.user_id})
+    else:
+        access_token = create_access_token(data={"id": user.user_id})
+    user.access_token = access_token
+    db.commit()
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
-        content={"success": True, "access_token": access_token, "token_type": "bearer"}
+        content={"success": True, "access_token": access_token, "token_type": "bearer",
+                  "access_token": access_token,
+                    "user_id":user.user_id }
     )
 
 @router.post("/logout")
@@ -201,7 +212,7 @@ def logout(token: str, db: Session = Depends(get_db)):
     try:
         payload = decode_token(token)
         print(payload)
-        email = payload.get("sub")
+        # email = payload.get("sub")
         user_id=payload.get("id")
 
         user = db.query(User).filter(User.user_id == user_id).first()
