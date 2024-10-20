@@ -27,7 +27,7 @@ const RishtaJunction = () => {
             <Route path="/userprofile/:userId" element={<UserProfileView />} />
             <Route path="/passwordreset" element={<PasswordReset />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/admin" element={<AdminPage />} />
+            {/* <Route path="/admin" element={<AdminPage />} /> */}
             <Route path="/terms" element={<Terms />} />
             <Route path="/support" element={<Support />} />
           </Routes>
