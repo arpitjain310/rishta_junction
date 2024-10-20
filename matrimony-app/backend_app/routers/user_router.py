@@ -65,7 +65,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     
     # Send OTP via SMS here
-    # send_otp(otp,user.mobile_number)
+    send_otp(otp,user.mobile_number)
     
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -160,7 +160,7 @@ def send_login_otp(mobile_number:str, db: Session = Depends(get_db)):
     db.commit()
     
     # Send OTP via SMS here
-    # send_otp(otp,user.mobile_number)
+    send_otp(otp,user.mobile_number)
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
@@ -230,7 +230,7 @@ def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db
     user.otp_expires_at = datetime.utcnow() + timedelta(minutes=10)
     db.commit()
 
-    #  send_otp(otp, user.mobile_number)
+    send_otp(otp, user.mobile_number)
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
