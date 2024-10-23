@@ -31,15 +31,17 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      
       await userServices.logout(token);
+     
+    } catch (error) {
+      console.error('Logout failed:', error);
+    } finally {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user_id');
       setIsLoggedIn(false);
       window.location.href = '/';
-    } catch (error) {
-      console.error('Logout failed:', error);
     }
+
   };
 
   return (

@@ -30,7 +30,11 @@ const UserProfile = ({ userId }) => {
 
   const handleSave = async () => {
     try {
-      await profileServices.updateProfile(profile.profile_id, profile);
+      const birthDate = new Date(profile.date_of_birth);
+      const today = new Date();
+      const age = Math.floor((today - birthDate) / (365.25 * 24 * 60 * 60 * 1000));
+      const updatedProfile = { ...profile, age };      
+      await profileServices.updateProfile(profile.profile_id, updatedProfile);
       alert('Profile updated successfully!');
       window.location.href = '/';
     } catch (err) {
@@ -168,6 +172,7 @@ const UserProfile = ({ userId }) => {
         <select name="education" value={profile.education || ''} onChange={handleInputChange} required>
           <option value="">Select Education Level</option>
           <option value="High School">High School</option>
+          <option value="Intermediate">Intermediate</option>
           <option value="Bachelor's">Bachelor's</option>
           <option value="Master's">Master's</option>
           <option value="PhD">PhD</option>
@@ -428,7 +433,7 @@ const UserProfile = ({ userId }) => {
         <label htmlFor="sibling_details">Sibling Details:</label>
         <textarea id="sibling_details" name="sibling_details" value={profile.sibling_details || ''} onChange={handleInputChange} placeholder="Enter details about your siblings"></textarea>
 
-        <button onClick={handleSave}>Save Changes</button>
+        <button onClick={handleSave}>Save</button>
       </div>
     </div>
   );

@@ -24,6 +24,7 @@ const Login = ({ onClose, onLoginSuccess }) => {
       if (loginMethod === "email") {
         const data = await userServices.login(email, password);
         localStorage.setItem("accessToken", data.access_token);
+        localStorage.setItem("user_id", data.user_id);
         onLoginSuccess();
         onClose();
         window.location.href = '/profile';
@@ -44,7 +45,8 @@ const Login = ({ onClose, onLoginSuccess }) => {
 
     try {
       const data = await userServices.verifyLoginOtp(mobile, otp);
-      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("accessToken", data.access_token);
+      localStorage.setItem("user_id", data.user_id);
       onLoginSuccess();
       onClose();
       window.location.href = '/profile';
