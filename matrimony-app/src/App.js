@@ -14,6 +14,7 @@ import AdminPage from './pages/admin/admin.jsx';
 import Support from './pages/support/support.jsx';
 import UserProfileView from './pages/userprofileview/UserProfileView.jsx';
 import PasswordReset from './pages/passwordreset/passwordreset.jsx';
+import StorageDemo from './pages/userprofile/sample.jsx';
 
 const RishtaJunction = () => {
   return (
@@ -30,6 +31,7 @@ const RishtaJunction = () => {
             {/* <Route path="/admin" element={<AdminPage />} /> */}
             <Route path="/terms" element={<Terms />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/storage" element={<StorageDemo />} />
           </Routes>
         </main>
         <Footer />
